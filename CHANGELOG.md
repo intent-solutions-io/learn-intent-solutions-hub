@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.3.0] - 2026-07-17
+
+- feat(deploy): auto-deploy to learn.intentsolutions.io on merge to main (#3) (3c98103)
+
+
 ## [v0.2.0] - 2026-07-17
 
 - feat(site): add the learn.intentsolutions.io landing page (eb2e4ad)
