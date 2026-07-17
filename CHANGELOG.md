@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.2.0] - 2026-07-17
+
+- feat(site): add the learn.intentsolutions.io landing page (eb2e4ad)
+
+
 ## [v0.1.0] - 2026-07-17
 
 - feat(governance): dress the hub repo with full governance, docs, and CI (repo-dress fill-gaps) (720f87a)
