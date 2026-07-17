@@ -1,5 +1,11 @@
 # Changelog
 
+## [v0.1.0] - 2026-07-17
+
+- feat(governance): dress the hub repo with full governance, docs, and CI (repo-dress fill-gaps) (720f87a)
+- chore: scaffold learn-intent-solutions (cohort learning hub -> learn.intentsolutions.io) (3fb5d88)
+
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
