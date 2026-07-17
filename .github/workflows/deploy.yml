@@ -1,0 +1,56 @@
+name: Deploy
+
+# Merge to main -> pre-deploy gate -> Tailscale OIDC -> SSH to the intentsolutions
+# VPS -> force-command /usr/local/sbin/deploy-learn-intentsolutions (git fetch +
+# reset; NO build, the repo is plain static) -> Caddy file_server from
+# /srv/learn-intentsolutions/public -> /healthz smoke check.
+#
+# A merge is a publish. Review is the gate: PRs are previewed and approved before
+# merge, and only a merge to main triggers this deploy. Onboarded per the VPS
+# repo-deploy runbook (static variant), reusing the existing learn-intentsolutions
+# deploy key + force-command.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  id-token: write   # required for Tailscale OIDC
+
+concurrency:
+  group: deploy-vps-${{ github.repository }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    name: pre-deploy gate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify static artifacts present
+        run: |
+          test -f public/index.html
+          test -f public/healthz
+          grep -q '"ok"' public/healthz
+          echo "static artifacts present"
+
+  deploy:
+    needs: test
+    uses: jeremylongshore/.github/.github/workflows/vps-deploy.yml@53d6be37d6c046818157b954acb33667ac095dd8
+    with:
+      variant: static
+      srv-path: /srv/learn-intentsolutions
+      health-check-url: https://learn.intentsolutions.io/healthz
+      vps-tailnet-ip: 100.88.144.55
+      vps-public-ip: 167.86.106.29
+      vps-host: intentsolutions
+      vps-user: intentsolutions
+      smoke-validation: '.ok == true'
+    secrets:
+      TS_OIDC_CLIENT_ID: ${{ secrets.TS_OIDC_CLIENT_ID }}
+      TS_AUDIENCE: ${{ secrets.TS_AUDIENCE }}
+      VPS_DEPLOY_KEY: ${{ secrets.VPS_DEPLOY_KEY }}
+      VPS_HOST_KEY: ${{ secrets.VPS_HOST_KEY }}
