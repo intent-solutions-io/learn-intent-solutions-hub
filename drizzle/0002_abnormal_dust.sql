@@ -1,0 +1,1 @@
+ALTER TABLE `practice_results` ADD `exam_code` text DEFAULT 'CCAR-F' NOT NULL;

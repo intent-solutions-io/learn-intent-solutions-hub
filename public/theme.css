@@ -1,0 +1,277 @@
+/* ============================================================
+   Intent Solutions — Cohort Learning Hub
+   Shared theme: tokens, base, chrome, primitives.
+
+   Matches intentsolutions.io: near-black ground, orange accent,
+   Syne display / Inter body / JetBrains Mono labels.
+
+   Every page links this file. Page-specific layout stays in that
+   page's inline <style>. Colors belong HERE, not there — this
+   codebase has already been half-converted once (see .backups/
+   index-dark-v1.html) and the stray literals it left behind are
+   exactly what this file exists to prevent.
+   ============================================================ */
+
+:root {
+  /* ground — note: "elevated" is DARKER than bg on dark, the
+     inverse of the old cream design. Cards separate by being
+     recessed + bordered, not by being lighter. */
+  --bg: #18171b;
+  --bg-elevated: #131217;
+  --bg-inset: #201f24;
+  --bg-inset-2: #29282e;
+
+  /* type */
+  --ink: #f5f4f2;        /* 16.23:1 on --bg */
+  --ink-dim: #a5a3a0;    /*  7.09:1 */
+  --ink-faint: #85837f;  /*  4.71:1 — passes AA. Do not use #6d6b69 (3.36:1, fails). */
+
+  /* accent — hover goes BRIGHTER on dark (the cream design went darker) */
+  --accent: #f97316;         /* 6.36:1 on --bg */
+  --accent-bright: #fb923c;  /* 7.88:1 — hover */
+  --accent-hover: #fb923c;   /* alias: old pages reference --accent-hover in gradients */
+  --accent-press: #ea6a0e;   /* :active */
+  --accent-ink: #18171b;     /* on --accent = 6.36:1. NOT #ffffff — that is 2.8:1 and fails AA. */
+
+  /* accent alpha ladder — 3 intents, not 10 arbitrary alphas */
+  --accent-wash: rgba(249,115,22,0.11);
+  --accent-line: rgba(249,115,22,0.32);
+  --accent-line-hi: rgba(249,115,22,0.55);
+  --accent-ring: 0 0 0 3px rgba(249,115,22,0.35);
+  --accent-glow: 0 4px 14px -4px rgba(249,115,22,0.5);
+  --accent-glow-hi: 0 6px 20px -4px rgba(249,115,22,0.65);
+
+  /* lines */
+  --line: rgba(245,244,242,0.11);
+  --line-soft: rgba(245,244,242,0.06);
+
+  /* semantic */
+  --positive: #4ade80;
+  --positive-wash: rgba(74,222,128,0.12);
+  --positive-line: rgba(74,222,128,0.32);
+  --pending: #eab308;
+  --pending-wash: rgba(234,179,8,0.12);
+  --pending-line: rgba(234,179,8,0.32);
+  --clay: #f87171;
+  --clay-wash: rgba(248,113,113,0.12);
+  --clay-line: rgba(248,113,113,0.4);
+
+  /* depth — near-black at high alpha; warm low-alpha shadows are
+     invisible on this ground, so borders carry the card edges. */
+  --shadow: 0 2px 4px rgba(0,0,0,0.3), 0 16px 40px -20px rgba(0,0,0,0.7);
+  --shadow-hover: 0 4px 10px rgba(0,0,0,0.35), 0 20px 50px -20px rgba(0,0,0,0.8);
+
+  --ease: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* type stacks. Syne = display only; its figures are eccentric, so
+     big numerals (720/1000/800) use --font-ui + tabular-nums. */
+  --font-display: "Syne", "Inter", system-ui, sans-serif;
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ===== reset + base ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+.mono { font-family: var(--font-mono); }
+
+h1, h2, h3 { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+
+/* Big numerals: Inter, not Syne. tabular-nums also stops the
+   readiness % from jittering as it animates. */
+.num, .rp-num, .meter-num, .score-num, .stat-num {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ===== chrome: header ===== */
+header.top {
+  position: sticky; top: 0; z-index: 20;
+  overflow: hidden; /* required — else .header-glow bleeds over content */
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.header-glow {
+  position: absolute; top: -140px; left: 60px; width: 340px; height: 220px;
+  background: radial-gradient(ellipse at center, rgba(249,115,22,0.16), transparent 70%);
+  pointer-events: none; filter: blur(8px);
+}
+.brand { position: relative; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-badge {
+  width: 28px; height: 28px; border-radius: 8px; background: var(--accent);
+  display: grid; place-items: center; flex-shrink: 0;
+  box-shadow: 0 0 0 1px rgba(249,115,22,0.4), 0 4px 14px -4px rgba(249,115,22,0.55);
+}
+.logo-badge svg { width: 16px; height: 16px; }
+.brand .name { font-weight: 700; font-size: 15px; letter-spacing: -0.005em; color: var(--ink-dim); }
+.brand .sep { color: var(--line); }
+.brand .here { color: var(--ink); font-weight: 600; }
+
+nav.crumbs { display: flex; gap: 22px; font-size: 13.5px; color: var(--ink-faint); }
+nav.crumbs a {
+  text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent;
+  transition: color 160ms var(--ease), border-color 160ms var(--ease);
+}
+nav.crumbs a:hover { color: var(--ink); }
+nav.crumbs a.current { color: var(--ink); font-weight: 600; border-color: var(--accent); }
+
+/* ===== chrome: footer ===== */
+footer.foot {
+  border-top: 1px solid var(--line);
+  padding: 24px 28px 40px;
+  font-size: 12.5px; color: var(--ink-faint);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+}
+footer.foot .f-brand { display: flex; align-items: center; gap: 9px; }
+footer.foot .f-brand svg { width: 17px; height: 17px; }
+footer.foot .f-brand b { color: var(--ink-dim); font-weight: 700; }
+footer.foot .f-credit { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; }
+
+/* ===== primitives: labels ===== */
+.eyebrow, .label, .zone-label, .sec-label, .panel-head {
+  font-family: var(--font-mono); font-size: 11.5px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+}
+.eyebrow { color: var(--accent); }
+.label, .zone-label, .sec-label { color: var(--ink-faint); }
+
+/* ===== primitives: CTA =====
+   Orange with dark ink + glow — the same object family as
+   .logo-badge. A white pill would be the generic dark-mode
+   default; orange is the brand. */
+.cta, .rp-cta, .full-btn, .submit, .composer-post, .call-btn {
+  background: var(--accent);
+  color: var(--bg);                 /* 6.36:1 */
+  border: 0;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: var(--accent-glow);
+  transition: background 160ms var(--ease), transform 160ms var(--ease), box-shadow 160ms var(--ease);
+}
+.cta:hover, .rp-cta:hover, .full-btn:hover, .submit:hover, .composer-post:hover, .call-btn:hover {
+  background: var(--accent-bright);  /* 7.88:1 — brighter, not darker */
+  box-shadow: var(--accent-glow-hi);
+  transform: translateY(-2px);
+}
+.cta:active, .rp-cta:active, .full-btn:active, .submit:active, .composer-post:active, .call-btn:active {
+  background: var(--accent-press);
+  transform: none;
+}
+.cta:focus-visible, .rp-cta:focus-visible, .full-btn:focus-visible,
+.submit:focus-visible, .composer-post:focus-visible, .call-btn:focus-visible {
+  outline: none; box-shadow: var(--accent-ring);
+}
+.cta:disabled, .full-btn:disabled, .submit:disabled, .composer-post:disabled, .call-btn:disabled {
+  background: var(--bg-inset); color: var(--ink-faint);
+  box-shadow: none; transform: none; cursor: not-allowed;
+  border: 1px solid var(--line);
+}
+
+/* ===== primitives: secondary / ghost buttons =====
+   Transparent-on-cream was bland; transparent-on-dark is invisible.
+   Give them an inset ground so they read as controls. */
+.btn-ghost, .startbtn, .load-more {
+  background: var(--bg-inset);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: border-color 160ms var(--ease), color 160ms var(--ease), background 160ms var(--ease);
+}
+.btn-ghost:hover, .startbtn:hover, .load-more:hover {
+  border-color: var(--accent); color: var(--accent); background: var(--accent-wash);
+}
+.btn-ghost:disabled, .startbtn:disabled, .load-more:disabled { opacity: 0.4; cursor: default; }
+
+/* ===== primitives: back link ===== */
+.back {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--ink-dim); text-decoration: none;
+  cursor: pointer; transition: color 160ms var(--ease);
+}
+.back:hover { color: var(--accent); }
+
+/* ===== primitives: chip ===== */
+.chip {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.03em;
+  border: 1px solid var(--line); border-radius: 999px; padding: 6px 13px;
+  background: var(--bg-elevated); color: var(--ink-dim); cursor: pointer;
+  transition: border-color 150ms var(--ease), color 150ms var(--ease), background 150ms var(--ease);
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+.chip.active { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+
+/* ===== primitives: card / panel ===== */
+.card, .panel {
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+
+/* ===== primitives: status pips ===== */
+.status-pip {
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.07em;
+  text-transform: uppercase; border-radius: 999px; padding: 3px 8px; white-space: nowrap;
+}
+.status-pip.active { color: var(--positive); background: var(--positive-wash); }
+.status-pip.beta { color: var(--pending); background: var(--pending-wash); }
+
+/* ===== entrance ===== */
+@keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise 640ms var(--ease) both; }
+.d1 { animation-delay: 60ms; }
+.d2 { animation-delay: 140ms; }
+.d3 { animation-delay: 220ms; }
+.d4 { animation-delay: 300ms; }
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; }
+  * { scroll-behavior: auto; }
+}
+
+/* ===== mobile =====
+   The wordmark + 5 nav links cannot fit 390px: the wordmark wrapped to
+   3–4 lines and nav.crumbs overflowed by ~44px, where header.top's
+   overflow:hidden CLIPPED it — "Community" was unreachable, not just
+   ugly. Drop the wordmark (the badge is the mark, and .current's
+   underline says where you are) and let the nav scroll as a safety
+   valve for narrower phones / larger text settings. */
+@media (max-width: 700px) {
+  header.top { padding: 10px 14px; gap: 12px; }
+  .brand .name { display: none; }
+  nav.crumbs {
+    gap: 16px; font-size: 13px;
+    overflow-x: auto; flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  nav.crumbs::-webkit-scrollbar { display: none; }
+  nav.crumbs a { padding: 8px 0; white-space: nowrap; }  /* ~30px tap target */
+  .header-glow { left: 0; width: 240px; }
+
+  footer.foot { padding: 20px 16px 32px; font-size: 12px; }
+  footer.foot .f-credit { font-size: 10.5px; }
+}
+
+/* long unbreakable tokens (URLs in source notes, code spans) must not
+   push the layout sideways on a phone */
+@media (max-width: 700px) {
+  body { overflow-wrap: break-word; }
+  code, .mono { overflow-wrap: anywhere; }
+}

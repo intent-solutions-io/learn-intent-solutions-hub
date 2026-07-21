@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Practice test · Intent Solutions Cohort · CCDV-F</title>
+<meta name="description" content="Domain-chunked CCDV-F (Developer — Foundations) practice tests with a readiness tracker." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/theme.css" />
+<style>
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  .eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  h1 { font-size: clamp(28px, 4.2vw, 38px); line-height: 1.14; }
+  .intro { margin-top: 14px; font-size: 15px; color: var(--ink-dim); max-width: 600px; }
+  .intro .sample { display: block; margin-top: 8px; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.6; color: var(--ink-faint); }
+
+  .view { display: none; }
+  .view.on { display: block; }
+
+  .meter-card { margin-top: 36px; background: var(--bg-elevated); border: 1px solid var(--line); border-radius: 18px; padding: 30px 32px; box-shadow: var(--shadow); }
+  .meter-top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+  .meter-label { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); }
+  .meter-num { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .meter-num.ready { color: var(--positive); }
+  .meter-bar { height: 10px; border-radius: 999px; background: var(--bg-inset); overflow: hidden; }
+  .meter-bar span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), var(--accent-hover)); transition: width 600ms var(--ease); }
+  .meter-bar span.ready { background: var(--positive); }
+  .gates { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+  .gate { flex: 1; min-width: 180px; border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: var(--bg-inset); }
+  .gate .g-k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 6px; }
+  .gate .g-v { font-size: 17px; font-weight: 700; }
+  .gate .g-v .met { color: var(--positive); }
+  .gate .g-note { font-size: 12px; color: var(--ink-faint); margin-top: 3px; }
+  .ready-banner { margin-top: 16px; padding: 14px 18px; border-radius: 12px; background: var(--positive-wash); border: 1px solid var(--positive-line); color: var(--positive); font-weight: 600; font-size: 14.5px; display: none; }
+  .ready-banner.on { display: block; }
+  .reset { margin-top: 14px; font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .reset:hover { color: var(--clay); }
+
+  .sec-label { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); margin: 40px 0 16px; }
+  .dom-card { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; margin-bottom: 12px; display: flex; align-items: center; gap: 20px; box-shadow: var(--shadow); }
+  .dom-card .dom-body { flex: 1; min-width: 0; }
+  .dom-card .dom-name { font-size: 16px; font-weight: 700; letter-spacing: -0.005em; }
+  .dom-card .dom-meta { font-family: var(--font-mono); font-size: 11px; color: var(--ink-faint); margin-top: 4px; }
+  .dom-card .dom-bar { height: 6px; border-radius: 999px; background: var(--bg-inset); overflow: hidden; margin-top: 10px; max-width: 340px; }
+  .dom-card .dom-bar span { display: block; height: 100%; border-radius: 999px; }
+  .dom-card .dom-bar span.ok { background: var(--positive); }
+  .dom-card .dom-bar span.weak { background: var(--pending); }
+  .dom-card .best { font-family: var(--font-mono); font-size: 13px; color: var(--ink-dim); flex-shrink: 0; text-align: right; min-width: 62px; }
+  .dom-card .best .cleared { color: var(--positive); }
+  .startbtn { flex-shrink: 0; border-radius: 999px; padding: 9px 18px; font-size: 13.5px; font-weight: 600; }
+  .full-btn { width: 100%; margin-top: 18px; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 15px; border-radius: 12px; padding: 15px; }
+
+  #quiz-meta { margin-bottom: 24px; }
+  #quiz-meta h2 { font-size: 24px; font-weight: 800; letter-spacing: -0.015em; }
+  #quiz-meta .qm-sub { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); margin-top: 6px; letter-spacing: 0.04em; }
+  .q { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: 14px; padding: 24px 24px 18px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .q-domain { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 12px; }
+  .q-num { color: var(--accent); }
+  .q-text { font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 18px; line-height: 1.5; }
+  .q-text code, .opt code, .rationale code { font-family: var(--font-mono); font-size: 0.88em; background: var(--bg-inset); padding: 1px 5px; border-radius: 5px; }
+  .opt { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; margin-bottom: 8px; cursor: pointer; font-size: 14.5px; color: var(--ink-dim); transition: border-color 140ms var(--ease), background 140ms var(--ease), color 140ms var(--ease); }
+  .opt:hover { border-color: var(--accent-line); color: var(--ink); }
+  .opt input { margin-top: 3px; accent-color: var(--accent); flex-shrink: 0; }
+  .opt:has(input:checked) { border-color: var(--accent); background: var(--accent-wash); color: var(--ink); }
+  .q.graded .opt { cursor: default; }
+  .opt.correct { border-color: var(--positive); background: var(--positive-wash); color: var(--ink); }
+  .opt.wrong { border-color: var(--clay); background: var(--clay-wash); color: var(--ink); }
+  .opt .tag { margin-left: auto; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; align-self: center; white-space: nowrap; padding-left: 8px; }
+  .opt.correct .tag { color: var(--positive); }
+  .opt.wrong .tag { color: var(--clay); }
+  .rationale { margin-top: 12px; padding: 13px 16px; border-left: 2px solid var(--accent); background: var(--bg-inset); border-radius: 0 8px 8px 0; font-size: 13.5px; color: var(--ink-dim); display: none; }
+  .q.graded .rationale { display: block; }
+  .rationale b { color: var(--accent); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; display: block; margin-bottom: 4px; }
+
+  .whoami { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; margin: 8px 0 18px; box-shadow: var(--shadow); }
+  .whoami label.lbl { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+  .whoami input[type=text] { width: 100%; background: var(--bg-inset); color: var(--ink); border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px; font-family: var(--font-ui); font-size: 15px; }
+  .whoami input[type=text]:focus { outline: none; border-color: var(--accent-line-hi); }
+  .whoami input:disabled { opacity: 0.45; }
+  .check { display: flex; align-items: center; gap: 9px; margin-top: 11px; font-size: 13px; color: var(--ink-dim); cursor: pointer; }
+  .check input { accent-color: var(--accent); }
+
+  .submit { width: 100%; margin-top: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; border-radius: 12px; padding: 15px; }
+  .warn { color: var(--clay); font-size: 13px; text-align: center; margin-top: 12px; display: none; }
+  .warn.on { display: block; }
+
+  .score-card { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 22px; box-shadow: var(--shadow); }
+  .score-num { font-size: 56px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .score-num .of { font-size: 20px; color: var(--ink-faint); font-weight: 600; }
+  .score-verdict { margin-top: 12px; font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .score-verdict.pass { color: var(--positive); } .score-verdict.below { color: var(--pending); }
+  .score-sub { margin-top: 10px; font-size: 14px; color: var(--ink-dim); }
+  .dom { margin-bottom: 15px; }
+  .dom-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+  .dom-name2 { font-size: 14.5px; font-weight: 600; }
+  .dom-pct { font-family: var(--font-mono); font-size: 13px; color: var(--ink-dim); }
+  .bar { height: 8px; border-radius: 999px; background: var(--bg-inset); overflow: hidden; }
+  .bar span { display: block; height: 100%; border-radius: 999px; }
+  .bar span.ok { background: var(--positive); } .bar span.weak { background: var(--pending); }
+  .btn-row { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+  .btn-ghost { flex: 1; text-align: center; border-radius: 12px; padding: 13px; font-weight: 600; font-size: 14.5px; }
+  .saved { margin-top: 16px; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint); text-align: center; }
+
+  .loading, .loaderr { text-align: center; color: var(--ink-faint); padding: 60px 0; font-family: var(--font-mono); font-size: 13px; }
+  .loaderr { color: var(--clay); }
+
+  footer.foot { margin-top: 56px; }
+
+  @media (max-width: 620px) { body { padding: 32px 16px 70px; } .dom-card { flex-wrap: wrap; } .startbtn { width: 100%; } .q { padding: 20px 18px 14px; } .gate { min-width: 140px; } }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="header-glow" aria-hidden="true"></div>
+  <a class="brand" href="/">
+    <span class="logo-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="5" cy="19" r="2" fill="var(--bg)"/>
+        <circle cx="12" cy="12" r="2" fill="var(--bg)"/>
+        <path d="M5 19 L12 12" stroke="var(--bg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 12 L19 5" stroke="var(--bg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M13 5 H19 V11" stroke="var(--bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="name">Intent Solutions <span class="sep">/</span> <span class="here">Practice</span></span>
+  </a>
+  <nav class="crumbs">
+    <a href="/">Home</a>
+    <a href="/#tracks">Tracks</a>
+    <a href="/practice" class="current">Practice</a>
+    <a href="/#tools">Tools</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <a class="back" id="back">&larr; Cohort Hub</a>
+  <div class="eyebrow">Practice test &middot; CCDV-F</div>
+  <h1>Developer — Foundations practice</h1>
+  <p class="intro">Take a domain at a time or the full set. Scored by domain against the 720 line — your progress is tracked below and saved on this device. <span class="sample" id="bank-note">Loading the question bank&hellip;</span></p>
+
+  <div class="loading" id="loading">Loading&hellip;</div>
+  <div class="loaderr view" id="loaderr">Couldn't load the question bank. Refresh to try again.</div>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="view" id="dashboard">
+    <div class="meter-card">
+      <div class="meter-top">
+        <span class="meter-label">Test readiness</span>
+        <span class="meter-num" id="meter-num">0%</span>
+      </div>
+      <div class="meter-bar"><span id="meter-fill" style="width:0%"></span></div>
+      <div class="gates">
+        <div class="gate">
+          <div class="g-k">Domains at 70%+</div>
+          <div class="g-v" id="gate-domains">0 / 8</div>
+          <div class="g-note">Every domain clears 70%</div>
+        </div>
+        <div class="gate">
+          <div class="g-k">Full tests ≥ 800</div>
+          <div class="g-v" id="gate-full">0 / 2</div>
+          <div class="g-note">Two clean full runs</div>
+        </div>
+      </div>
+      <div class="ready-banner" id="ready-banner">Ready to sit — both gates cleared on this device's practice history.</div>
+      <div class="reset" id="reset">Reset my progress on this device</div>
+    </div>
+
+    <div class="sec-label">By domain</div>
+    <div id="dom-grid"></div>
+    <button class="full-btn" id="full-btn">Take the full test &rarr;</button>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section class="view" id="quiz-view">
+    <div id="quiz-meta"><h2 id="quiz-title"></h2><div class="qm-sub" id="quiz-sub"></div></div>
+    <form id="quiz"></form>
+    <div class="whoami" id="whoami" style="display:none">
+      <label class="lbl" for="name">Name <span class="mono" style="color:var(--ink-faint);font-size:11px">optional</span></label>
+      <input type="text" id="name" autocomplete="given-name" />
+      <label class="check"><input type="checkbox" id="anon" /> Score anonymously</label>
+    </div>
+    <button class="submit" id="submit" type="button">Score it</button>
+    <p class="warn" id="warn">Answer every question first.</p>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section class="view" id="results">
+    <div class="score-card">
+      <div class="score-num" id="r-score">—</div>
+      <div class="score-verdict" id="r-verdict"></div>
+      <div class="score-sub" id="r-sub"></div>
+    </div>
+    <div class="sec-label" id="r-dom-label" style="margin-top:8px">By domain</div>
+    <div id="r-doms"></div>
+    <div class="saved" id="r-saved"></div>
+    <div class="btn-row">
+      <button class="btn-ghost" id="r-review">Review answers</button>
+      <button class="btn-ghost" id="r-dash">Back to tracker</button>
+    </div>
+  </section>
+
+
+</div>
+
+<footer class="foot">
+  <span class="f-brand">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="5" cy="19" r="2" fill="currentColor"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      <path d="M5 19 L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M12 12 L19 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M13 5 H19 V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span><b>Intent Solutions</b> · Cohort Learning Hub</span>
+  </span>
+  <span class="f-credit">Education arm · led by Max Sheahan</span>
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  var STORE = "ccdv_f_readiness_v1";
+  var EXAM_CODE = "CCDV-F";
+  var PASS = 720, FULL_PASS = 800;
+  var DOMAINS = [
+    { key: "dev-agents", name: "Agents and Workflows" },
+    { key: "dev-integration", name: "Applications and Integration" },
+    { key: "dev-claudecode", name: "Claude Code" },
+    { key: "dev-eval", name: "Eval, Testing, and Debugging" },
+    { key: "dev-modelselect", name: "Model Selection and Optimization" },
+    { key: "dev-promptcontext", name: "Prompt and Context Engineering" },
+    { key: "dev-security", name: "Security and Safety" },
+    { key: "dev-tools", name: "Tools and MCPs" }
+  ];
+
+  var BANK = null;      // { source, questions: [...] }
+  var byDomain = {};    // key -> [questions]
+  var current = null;   // { mode:'domain'|'full', key, questions:[] }
+
+  var $ = function (id) { return document.getElementById(id); };
+  function show(view) { ["dashboard","quiz-view","results"].forEach(function(v){ $(v).classList.toggle("on", v===view); }); }
+  function esc(s){ var d=document.createElement("div"); d.textContent=s==null?"":String(s); return d.innerHTML; }
+  // allow inline `code` spans from the source, nothing else
+  function fmt(s){ return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+
+  function load(){ try { return JSON.parse(localStorage.getItem(STORE)) || { domains:{}, full:[] }; } catch(e){ return { domains:{}, full:[] }; } }
+  function save(s){ try { localStorage.setItem(STORE, JSON.stringify(s)); } catch(e){} }
+  var state = load();
+
+  /* ---------- init ---------- */
+  fetch("/questions-developer.json").then(function(r){ if(!r.ok) throw new Error("bank"); return r.json(); })
+    .then(function(data){
+      BANK = data;
+      (data.questions||[]).forEach(function(q){ (byDomain[q.domainKey]=byDomain[q.domainKey]||[]).push(q); });
+      var n = (data.questions||[]).length;
+      $("bank-note").textContent = n + "-question bank" + (data.source ? " · " + data.source : "") + ". Practice set — not the official questions.";
+      $("loading").style.display = "none";
+      renderDashboard();
+      show("dashboard");
+    })
+    .catch(function(){ $("loading").style.display="none"; $("loaderr").classList.add("on"); });
+
+  /* ---------- dashboard ---------- */
+  function domainsWithQ(){ return DOMAINS.filter(function(d){ return (byDomain[d.key]||[]).length > 0; }); }
+
+  function renderDashboard(){
+    var withQ = domainsWithQ();
+    var cleared = withQ.filter(function(d){ var b=state.domains[d.key]; return b && b.best>=70; }).length;
+    var qualifying = (state.full||[]).filter(function(f){ return f.score>=FULL_PASS; }).length;
+    var nD = withQ.length || 1;
+    var meter = Math.round((cleared/nD*0.5 + Math.min(qualifying,2)/2*0.5)*100);
+    var ready = cleared===withQ.length && qualifying>=2 && withQ.length>0;
+
+    $("meter-num").textContent = meter + "%";
+    $("meter-num").classList.toggle("ready", ready);
+    $("meter-fill").style.width = meter + "%";
+    $("meter-fill").classList.toggle("ready", ready);
+    $("gate-domains").innerHTML = '<span class="' + (cleared===withQ.length&&withQ.length>0?"met":"") + '">' + cleared + " / " + withQ.length + "</span>";
+    $("gate-full").innerHTML = '<span class="' + (qualifying>=2?"met":"") + '">' + Math.min(qualifying,2) + " / 2</span>";
+    $("ready-banner").classList.toggle("on", ready);
+
+    var grid = $("dom-grid"); grid.innerHTML = "";
+    DOMAINS.forEach(function(d){
+      var qs = byDomain[d.key] || [];
+      var b = state.domains[d.key];
+      var pct = b ? b.best : null;
+      var cleared = pct!=null && pct>=70;
+      var barPct = pct==null ? 0 : pct;
+      var best = pct==null ? '<span style="color:var(--ink-faint)">—</span>' : '<span class="' + (cleared?"cleared":"") + '">' + pct + '%</span>';
+      var meta = qs.length ? (qs.length + " questions" + (b ? " · " + b.attempts + " attempt" + (b.attempts>1?"s":"") : "")) : "no questions yet";
+      var card = document.createElement("div"); card.className = "dom-card";
+      card.innerHTML =
+        '<div class="dom-body"><div class="dom-name">' + esc(d.name) + '</div>' +
+        '<div class="dom-meta">' + meta + '</div>' +
+        '<div class="dom-bar"><span class="' + (cleared?"ok":"weak") + '" style="width:' + barPct + '%"></span></div></div>' +
+        '<span class="best">' + best + '</span>' +
+        '<button class="startbtn" data-key="' + d.key + '"' + (qs.length?"":" disabled") + '>Practice</button>';
+      grid.appendChild(card);
+    });
+    grid.querySelectorAll(".startbtn").forEach(function(btn){
+      btn.addEventListener("click", function(){ startSet("domain", btn.getAttribute("data-key")); });
+    });
+  }
+
+  /* ---------- start a set ---------- */
+  function startSet(mode, key){
+    var qs;
+    if (mode==="domain") { qs = (byDomain[key]||[]).slice(); }
+    else { qs = (BANK.questions||[]).slice(); }
+    if (!qs.length) return;
+    current = { mode: mode, key: key, questions: qs };
+
+    var domName = mode==="domain" ? (DOMAINS.filter(function(d){return d.key===key;})[0]||{}).name : "Full test";
+    $("quiz-title").textContent = mode==="domain" ? domName : "Full practice test";
+    $("quiz-sub").textContent = qs.length + " questions" + (mode==="full" ? " · scored against the 720 line" : " · " + domName);
+    $("whoami").style.display = mode==="full" ? "block" : "none";
+
+    var form = $("quiz"); form.innerHTML = "";
+    qs.forEach(function(q, i){
+      var div = document.createElement("div"); div.className="q"; div.setAttribute("data-i", i);
+      var opts = q.options.map(function(o, oi){
+        return '<label class="opt"><input type="radio" name="q'+i+'" value="'+oi+'" /><span>'+fmt(o)+'</span></label>';
+      }).join("");
+      div.innerHTML =
+        '<div class="q-domain"><span class="q-num">'+String(i+1).padStart(2,"0")+'</span> &middot; '+esc(q.domainName||"")+'</div>' +
+        '<div class="q-text">'+fmt(q.text)+'</div>' + opts +
+        '<div class="rationale"><b>Why</b>'+fmt(q.rationale||"")+'</div>';
+      form.appendChild(div);
+    });
+    $("warn").classList.remove("on");
+    show("quiz-view");
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  /* ---------- grade ---------- */
+  $("submit").addEventListener("click", function(){
+    var qs = current.questions;
+    var unanswered = [];
+    qs.forEach(function(q,i){ if(!$("quiz").querySelector('input[name="q'+i+'"]:checked')) unanswered.push(i); });
+    if (unanswered.length){ $("warn").classList.add("on"); $("quiz").querySelector('.q[data-i="'+unanswered[0]+'"]').scrollIntoView({behavior:"smooth",block:"center"}); return; }
+    $("warn").classList.remove("on");
+
+    var correct=0, dom={};
+    qs.forEach(function(q,i){
+      var picked = parseInt($("quiz").querySelector('input[name="q'+i+'"]:checked').value,10);
+      var right = q.answerIndex;
+      var k = q.domainKey;
+      dom[k] = dom[k] || { name:q.domainName, correct:0, total:0 };
+      dom[k].total++;
+      var qEl = $("quiz").querySelector('.q[data-i="'+i+'"]'); qEl.classList.add("graded");
+      var opts = qEl.querySelectorAll(".opt");
+      opts[right].classList.add("correct"); opts[right].insertAdjacentHTML("beforeend",'<span class="tag">Correct</span>');
+      if (picked===right){ correct++; dom[k].correct++; }
+      else { opts[picked].classList.add("wrong"); opts[picked].insertAdjacentHTML("beforeend",'<span class="tag">Your pick</span>'); }
+    });
+
+    var total = qs.length;
+    var score = Math.round((correct/total)*1000);
+
+    // update per-domain bests
+    Object.keys(dom).forEach(function(k){
+      var pct = Math.round((dom[k].correct/dom[k].total)*100);
+      var prev = state.domains[k] || { best:0, attempts:0 };
+      state.domains[k] = { best: Math.max(prev.best, pct), attempts: prev.attempts+1 };
+    });
+    if (current.mode==="full"){ state.full = (state.full||[]); state.full.push({score:score, correct:correct, total:total}); if(state.full.length>20) state.full = state.full.slice(-20); }
+    save(state);
+
+    renderResults(score, correct, total, dom, current.mode);
+
+    // capture full tests to the cohort record
+    var saved = $("r-saved");
+    if (current.mode==="full"){
+      var anon = $("anon").checked;
+      var payload = { examCode: EXAM_CODE, correct:correct, total:total, domainBreakdown: dom, name: anon?"":$("name").value.trim(), anonymous: anon };
+      fetch("/api/practice",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+        .then(function(r){ saved.textContent = r.ok ? "Full-test result saved to the cohort record." : "Result not saved."; })
+        .catch(function(){ saved.textContent = "Result not saved."; });
+    } else { saved.textContent = "Domain practice tracked on this device."; }
+
+    show("results"); window.scrollTo({top:0, behavior:"smooth"});
+  });
+
+  /* ---------- results ---------- */
+  function renderResults(score, correct, total, dom, mode){
+    if (mode==="full"){
+      $("r-score").innerHTML = score + '<span class="of"> / 1000</span>';
+      var v=$("r-verdict");
+      if (score>=PASS){ v.textContent="On track — above the 720 line"; v.className="score-verdict pass"; }
+      else { v.textContent="Below the 720 line"; v.className="score-verdict below"; }
+      $("r-dom-label").style.display="";
+    } else {
+      var only = Object.keys(dom)[0]; var p = dom[only]; var pct = Math.round((p.correct/p.total)*100);
+      $("r-score").innerHTML = pct + '<span class="of">%</span>';
+      var v2=$("r-verdict");
+      if (pct>=70){ v2.textContent="Domain cleared — 70%+"; v2.className="score-verdict pass"; }
+      else { v2.textContent="Below 70% — patch this domain"; v2.className="score-verdict below"; }
+      $("r-dom-label").style.display="none";
+    }
+    $("r-sub").textContent = correct + " of " + total + " correct.";
+    var box=$("r-doms"); box.innerHTML="";
+    if (mode==="full"){
+      Object.keys(dom).forEach(function(k){
+        var d=dom[k]; var pct=Math.round((d.correct/d.total)*100); var weak=pct<70;
+        box.insertAdjacentHTML("beforeend",
+          '<div class="dom"><div class="dom-top"><span class="dom-name2">'+esc(d.name)+'</span>'+
+          '<span class="dom-pct">'+d.correct+'/'+d.total+' &middot; '+pct+'%</span></div>'+
+          '<div class="bar"><span class="'+(weak?"weak":"ok")+'" style="width:'+pct+'%"></span></div></div>');
+      });
+    }
+  }
+
+  /* ---------- nav ---------- */
+  $("r-dash").addEventListener("click", function(){ renderDashboard(); show("dashboard"); window.scrollTo({top:0}); });
+  $("r-review").addEventListener("click", function(){ show("quiz-view"); window.scrollTo({top:0,behavior:"smooth"}); });
+  $("back").addEventListener("click", function(){ if($("results").classList.contains("on")||$("quiz-view").classList.contains("on")){ renderDashboard(); show("dashboard"); window.scrollTo({top:0}); } else { window.location.href="/"; } });
+  $("full-btn").addEventListener("click", function(){ startSet("full"); });
+  $("anon").addEventListener("change", function(){ $("name").disabled=$("anon").checked; if($("anon").checked)$("name").value=""; });
+  $("reset").addEventListener("click", function(){ if(confirm("Clear your practice progress on this device?")){ state={domains:{},full:[]}; save(state); renderDashboard(); } });
+})();
+</script>
+</body>
+</html>

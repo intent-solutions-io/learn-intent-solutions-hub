@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exam prep · CCAR-F · Intent Solutions</title>
+<meta name="description" content="Format, scoring, domains, and the diagnostic study loop for the Claude Certified Architect — Foundations exam." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/theme.css" />
+<style>
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+
+  /* header */
+  header.page { padding: 40px 0 8px; }
+  .eyebrow { display: block; font-size: 12px; letter-spacing: 0.2em; margin: 0 0 12px; }
+  h1 { font-size: clamp(30px, 4.6vw, 42px); line-height: 1.14; }
+  .lede { margin-top: 20px; font-size: 17px; color: var(--ink-dim); max-width: 580px; }
+  .lede strong { color: var(--ink); font-weight: 600; }
+
+  /* section */
+  section { padding: 40px 0; border-top: 1px solid var(--line); }
+  section:first-of-type { border-top: none; }
+  .label {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 18px;
+  }
+  h2 { font-size: 21px; margin-bottom: 14px; }
+  p { color: var(--ink-dim); margin-bottom: 14px; }
+  p:last-child { margin-bottom: 0; }
+  p strong, li strong { color: var(--ink); font-weight: 600; }
+
+  /* card */
+  .card {
+    border: 1px solid var(--line); border-radius: 14px; background: var(--bg-elevated);
+    padding: 26px 28px; box-shadow: var(--shadow);
+  }
+  .card + .card { margin-top: 16px; }
+
+  /* fact grid */
+  .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+  .fact { background: var(--bg-elevated); padding: 20px 22px; }
+  .fact .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+  .fact .v { margin-top: 6px; font-size: 16px; font-weight: 600; color: var(--ink); }
+  .fact .v span { color: var(--ink-dim); font-weight: 400; }
+  .fact .v .num { font-family: var(--font-mono); }
+
+  /* domains table */
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-faint); font-weight: 500;
+    text-align: left; padding: 0 0 12px;
+  }
+  thead th.w { text-align: right; }
+  tbody td { padding: 15px 0; border-top: 1px solid var(--line); font-size: 15px; vertical-align: baseline; }
+  tbody td.dom { color: var(--ink); }
+  tbody td.dom .n { font-family: var(--font-mono); color: var(--ink-faint); font-size: 13px; margin-right: 12px; }
+  tbody td.w { text-align: right; font-family: var(--font-mono); color: var(--accent); font-weight: 500; white-space: nowrap; }
+
+  /* scenarios */
+  .scen { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow); }
+  .scen li { background: var(--bg-elevated); padding: 16px 20px; font-size: 14.5px; color: var(--ink); display: flex; align-items: baseline; gap: 12px; }
+  .scen li .idx { font-family: var(--font-mono); font-size: 12px; color: var(--accent); flex-shrink: 0; }
+  .scen-note { margin-top: 16px; font-size: 14.5px; color: var(--ink-faint); }
+  .scen-note strong { color: var(--ink-dim); }
+
+  /* study loop */
+  ol.loop { list-style: none; counter-reset: step; }
+  ol.loop li {
+    counter-increment: step; position: relative; padding: 0 0 20px 46px;
+    color: var(--ink-dim); font-size: 15.5px;
+  }
+  ol.loop li:last-child { padding-bottom: 0; }
+  ol.loop li::before {
+    content: counter(step); position: absolute; left: 0; top: -2px;
+    width: 30px; height: 30px; border-radius: 999px;
+    border: 1px solid var(--accent-line); color: var(--accent);
+    font-family: var(--font-mono); font-size: 13px; font-weight: 500;
+    display: grid; place-items: center;
+  }
+  ol.loop li::after {
+    content: ""; position: absolute; left: 15px; top: 30px; bottom: 6px; width: 1px;
+    background: var(--line);
+  }
+  ol.loop li:last-child::after { display: none; }
+
+  .rule {
+    margin-top: 22px; padding: 18px 22px; border-radius: 12px;
+    background: linear-gradient(180deg, var(--accent-wash), transparent 70%), var(--bg-elevated);
+    border: 1px solid var(--accent-line);
+    font-size: 15px; color: var(--ink); box-shadow: var(--shadow);
+  }
+  .rule .k { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 6px; }
+
+  /* status / freshness banner */
+  .status-banner {
+    margin-top: 26px; padding: 18px 22px; border-radius: 12px;
+    background: var(--pending-wash); border: 1px solid var(--pending-line);
+    font-size: 14.5px; color: var(--ink);
+  }
+  .status-pill {
+    display: inline-block; font-family: var(--font-mono); font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--pending);
+    border: 1px solid var(--pending-line); border-radius: 999px; padding: 4px 10px;
+  }
+  .status-banner p { color: var(--ink-dim); margin-top: 10px; }
+  .status-meta { font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-faint) !important; margin-top: 12px !important; }
+
+  /* compliance disclaimer */
+  .disclaimer { font-size: 13px; color: var(--ink-faint); border-top: 1px solid var(--line); padding-top: 22px; }
+
+  /* track switcher */
+  .tracks { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
+  .track-link {
+    font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em;
+    text-decoration: none; border-radius: 999px; padding: 7px 14px;
+    border: 1px solid var(--line); color: var(--ink-dim);
+    transition: border-color 180ms var(--ease), color 180ms var(--ease);
+  }
+  .track-link:hover { border-color: var(--accent); color: var(--accent); }
+  .track-link.current { background: var(--accent-wash); color: var(--accent); border-color: var(--accent); }
+
+  /* CTA */
+  a.cta { display: inline-flex; align-items: center; gap: 12px; font-size: 16px; padding: 15px 26px; border-radius: 12px; }
+  a.cta svg { width: 17px; height: 17px; }
+
+  footer.foot { margin-top: 24px; }
+
+
+  @media (max-width: 600px) {
+    .facts, .scen { grid-template-columns: 1fr; }
+    .card { padding: 22px; }
+    tbody td.dom .n { display: block; margin: 0 0 3px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="header-glow" aria-hidden="true"></div>
+  <a class="brand" href="/">
+    <span class="logo-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="5" cy="19" r="2" fill="var(--bg)"/>
+        <circle cx="12" cy="12" r="2" fill="var(--bg)"/>
+        <path d="M5 19 L12 12" stroke="var(--bg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 12 L19 5" stroke="var(--bg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M13 5 H19 V11" stroke="var(--bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="name">Intent Solutions <span class="sep">/</span> <span class="here">Tracks</span></span>
+  </a>
+  <nav class="crumbs">
+    <a href="/">Home</a>
+    <a href="/#tracks">Tracks</a>
+    <a href="/practice">Practice</a>
+    <a href="/#tools">Tools</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <header class="page rise">
+    <div class="eyebrow">Exam prep · CCAR-F</div>
+    <h1>The certification, and how to clear it.</h1>
+    <p class="lede">The <strong>Claude Certified Architect — Foundations (CCAR-F)</strong> is Anthropic's first official technical certification, launched March 12, 2026. Anthropic's exam code changed from <strong>CCA-F</strong> to <strong>CCAR-F</strong> in July 2026 when three additional exams launched alongside it — if you've seen "CCA-F" elsewhere, it's the same exam under its original code.</p>
+    <div class="status-banner">
+      <span class="status-pill" style="color:var(--positive);border-color:var(--positive-line)">Official verified</span>
+      <p>Certification name, exam code, format, scoring, domains, weights, and the six scenarios below are sourced directly from Anthropic's official <strong>Claude Certified Architect – Foundations Exam Guide</strong> (Version 1.0, effective July 2026). What's <em>not</em> yet confirmed: Intent Solutions cohort-specific access mechanics and target sit date — those remain <strong>Awaiting Jeremy confirmation</strong>, since the public Exam Guide doesn't cover partner-cohort logistics.</p>
+      <p class="status-meta">Last reviewed 2026-07-14 · Reviewed by Intent Solutions, sourced from Anthropic's official Exam Guide</p>
+    </div>
+    <div class="tracks">
+      <span class="track-link current">Architect · Foundations</span>
+      <a class="track-link" href="/associate-prep">Associate · Foundations</a>
+      <a class="track-link" href="/developer-prep">Developer · Foundations</a>
+      <a class="track-link" href="/architect-professional-prep">Architect · Professional</a>
+    </div>
+  </header>
+
+  <!-- FORMAT & SCORING -->
+  <section class="rise d1">
+    <div class="label">Format &amp; scoring</div>
+    <div class="facts">
+      <div class="fact"><div class="k">Questions</div><div class="v"><span class="num">60</span> <span>questions</span></div></div>
+      <div class="fact"><div class="k">Time</div><div class="v"><span class="num">120</span> <span>minutes</span></div></div>
+      <div class="fact"><div class="k">Delivery</div><div class="v">Online-proctored</div></div>
+      <div class="fact"><div class="k">Materials</div><div class="v">Closed-book <span>— no Claude, no docs, no browser</span></div></div>
+      <div class="fact"><div class="k">Scale</div><div class="v"><span class="num">1000</span>-point <span>scale</span></div></div>
+      <div class="fact"><div class="k">Pass</div><div class="v"><span class="num">720</span> <span>to pass</span></div></div>
+      <div class="fact"><div class="k">Fee</div><div class="v"><span class="num">$125</span> <span>USD</span></div></div>
+      <div class="fact"><div class="k">Validity</div><div class="v"><span class="num">12</span> <span>months from award</span></div></div>
+    </div>
+    <p style="margin-top:18px">Multiple choice, scenario-based, auto-graded. Distractors are deliberately plausible anti-patterns. The exam tests <strong>discrimination</strong> — picking the production-safe call — not free recall.</p>
+  </section>
+
+  <!-- DOMAINS -->
+  <section class="rise">
+    <div class="label">Domains &amp; weights</div>
+    <div class="card">
+      <table>
+        <thead>
+          <tr><th>Domain</th><th class="w">Weight</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="dom"><span class="n">01</span>Agentic Architecture &amp; Orchestration</td><td class="w">27%</td></tr>
+          <tr><td class="dom"><span class="n">02</span>Tool Design &amp; MCP Integration</td><td class="w">18%</td></tr>
+          <tr><td class="dom"><span class="n">03</span>Claude Code Configuration &amp; Workflows</td><td class="w">20%</td></tr>
+          <tr><td class="dom"><span class="n">04</span>Prompt Engineering &amp; Structured Output</td><td class="w">20%</td></tr>
+          <tr><td class="dom"><span class="n">05</span>Context Management &amp; Reliability</td><td class="w">15%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SCENARIOS -->
+  <section class="rise">
+    <div class="label">Scenarios</div>
+    <ul class="scen">
+      <li><span class="idx">1</span>Customer Support Resolution Agent</li>
+      <li><span class="idx">2</span>Code Generation with Claude Code</li>
+      <li><span class="idx">3</span>Multi-Agent Research System</li>
+      <li><span class="idx">4</span>Developer Productivity with Claude</li>
+      <li><span class="idx">5</span>Claude Code for Continuous Integration</li>
+      <li><span class="idx">6</span>Structured Data Extraction</li>
+    </ul>
+    <p class="scen-note">Six scenarios exist; <strong>four are drawn at random per exam</strong>. Study all six.</p>
+  </section>
+
+  <!-- STUDY LOOP -->
+  <section class="rise">
+    <div class="label">How to study</div>
+    <h2>A diagnostic loop</h2>
+    <ol class="loop">
+      <li>Take a full timed practice test cold.</li>
+      <li>Score it <strong>by domain</strong> — the domain split is the signal, the total is vanity.</li>
+      <li>For every miss, log which anti-pattern the trap answer represented.</li>
+      <li>Patch only the weakest domain.</li>
+      <li>Repeat until two consecutive tests clear <strong>800</strong> with no domain below ~70%.</li>
+    </ol>
+    <div class="rule">
+      <span class="k">Discipline</span>
+      Under a production scenario, when two answers look right, pick the one that <strong>fails safe</strong>.
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="rise d2">
+    <div class="label">Start</div>
+    <a class="cta" href="/practice">
+      Take the practice test
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
+    </a>
+    <p class="disclaimer">Intent Solutions provides learning support and preparation guidance. Official certification requirements, eligibility, exam structure, scoring, availability, and credential issuance are controlled by the official provider and may change. Intent Solutions does not guarantee certification.</p>
+  </section>
+
+
+</div>
+
+<footer class="foot">
+  <span class="f-brand">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="5" cy="19" r="2" fill="currentColor"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      <path d="M5 19 L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M12 12 L19 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M13 5 H19 V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span><b>Intent Solutions</b> · Cohort Learning Hub</span>
+  </span>
+  <span class="f-credit">Education arm · led by Max Sheahan</span>
+</footer>
+
+</body>
+</html>

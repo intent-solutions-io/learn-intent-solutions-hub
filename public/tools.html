@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tools &amp; setup · Cohort Learning Hub</title>
+<meta name="description" content="Claude Code, Cowork, and plugins for the Intent Solutions cohort." />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/theme.css" />
+<style>
+  /* page-specific layout only — colors/tokens live in /theme.css */
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  a.inline { color: var(--accent); text-decoration: none; }
+  a.inline:hover { color: var(--accent-bright); }
+
+  header.page { padding: 48px 0 8px; }
+  .eyebrow { display: block; margin-bottom: 10px; }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.14; }
+  .lede { margin-top: 18px; font-size: 17px; color: var(--ink-dim); max-width: 560px; }
+
+  section { padding: 40px 0 4px; }
+  .sec-label { color: var(--accent); margin-bottom: 6px; letter-spacing: 0.18em; }
+  h2 { font-size: 23px; margin-bottom: 14px; }
+
+  .card { padding: 26px 26px 24px; border-radius: 14px; }
+  .card p { color: var(--ink-dim); font-size: 15.5px; }
+  .card p + p { margin-top: 14px; }
+  .card p strong { color: var(--ink); font-weight: 600; }
+  .card .lead-in {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink-faint); margin-bottom: 10px;
+  }
+
+  pre {
+    margin: 18px 0 4px; background: var(--bg-inset);
+    border: 1px solid var(--line); border-radius: 10px;
+    padding: 15px 18px; overflow-x: auto;
+  }
+  pre code {
+    font-family: var(--font-mono); font-size: 13.5px; line-height: 1.7;
+    color: var(--ink); background: none; padding: 0; border: none;
+  }
+  pre .prompt { color: var(--accent); user-select: none; }
+  code {
+    font-family: var(--font-mono); font-size: 0.86em;
+    background: var(--bg-inset); border: 1px solid var(--line); border-radius: 5px;
+    padding: 1px 6px; color: var(--ink);
+  }
+
+  .chip.status {
+    display: inline-flex; align-items: center; gap: 7px; cursor: default;
+    font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 3px 10px;
+    border-color: var(--pending-line); color: var(--pending);
+    background: var(--pending-wash);
+  }
+  .chip.status:hover { border-color: var(--pending-line); color: var(--pending); }
+  .chip.status .dot { width: 6px; height: 6px; border-radius: 999px; background: var(--pending); }
+  .pending-note { margin-top: 14px; color: var(--ink-faint); font-size: 14.5px; }
+
+  .docs { margin-top: 16px; font-size: 14.5px; color: var(--ink-faint); }
+  .docs a { font-family: var(--font-mono); font-size: 13px; color: var(--accent); text-decoration: none; }
+  .docs a:hover { color: var(--accent-bright); }
+
+  footer.foot { margin-top: 56px; }
+
+  @media (max-width: 600px) {
+    header.page { padding: 32px 0 4px; }
+    .card { padding: 22px 20px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="header-glow" aria-hidden="true"></div>
+  <a class="brand" href="/">
+    <span class="logo-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="5" cy="19" r="2" fill="var(--bg)"/>
+        <circle cx="12" cy="12" r="2" fill="var(--bg)"/>
+        <path d="M5 19 L12 12" stroke="var(--bg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 12 L19 5" stroke="var(--bg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M13 5 H19 V11" stroke="var(--bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="name">Intent Solutions <span class="sep">/</span> <span class="here">Tools</span></span>
+  </a>
+  <nav class="crumbs">
+    <a href="/">Home</a>
+    <a href="/#tracks">Tracks</a>
+    <a href="/practice">Practice</a>
+    <a href="/#tools">Tools</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <header class="page rise">
+    <span class="eyebrow">Tools &amp; setup</span>
+    <h1>The toolkit</h1>
+    <p class="lede">Claude Code, Cowork, and plugins. Install once, then get back to the work.</p>
+  </header>
+
+  <!-- ============ CLAUDE CODE ============ -->
+  <section class="rise d1" aria-labelledby="cc-label">
+    <div class="sec-label" id="cc-label">01 — Claude Code</div>
+    <h2>Anthropic's agentic CLI</h2>
+    <div class="card">
+      <p>Runs in the terminal. Also available as a desktop app, on the web at <a class="inline" href="https://claude.ai/code">claude.ai/code</a>, and as IDE extensions for VS Code and JetBrains.</p>
+
+      <p class="lead-in" style="margin-top:22px;">Install</p>
+      <pre><code><span class="prompt">$ </span>npm install -g @anthropic-ai/claude-code</code></pre>
+      <p>Then run <code>claude</code> in a project directory to start. It authenticates on first run.</p>
+
+      <p>By default it asks permission before actions that change files or run commands. That is expected. Permission modes are configurable in settings.</p>
+
+      <p class="docs">Full reference: <a href="https://docs.claude.com">docs.claude.com</a></p>
+    </div>
+  </section>
+
+  <!-- ============ COWORK ============ -->
+  <section class="rise d2" aria-labelledby="cw-label">
+    <div class="sec-label" id="cw-label">02 — Claude Cowork</div>
+    <h2>The collaborative surface</h2>
+    <div class="card">
+      <p>A session-based collaborative environment used alongside Claude Code. Details differ from the CLI flow above.</p>
+      <p class="docs">Setup and usage: <a href="https://docs.claude.com">docs.claude.com</a></p>
+    </div>
+  </section>
+
+  <!-- ============ PLUGINS ============ -->
+  <section class="rise d3" aria-labelledby="pl-label">
+    <div class="sec-label" id="pl-label">03 — Plugins</div>
+    <h2>Extending Claude Code</h2>
+    <div class="card">
+      <p>Plugins add skills, slash commands, and MCP servers to Claude Code, installed from a marketplace.</p>
+
+      <p style="margin-top:20px;"><span class="chip status"><span class="dot"></span>Pending</span></p>
+      <p class="pending-note">The cohort's recommended plugin set is being finalized. This section will list the specific plugins once it lands.</p>
+
+      <p class="docs">Marketplace and plugin docs: <a href="https://docs.claude.com">docs.claude.com</a></p>
+    </div>
+  </section>
+
+</div>
+
+<footer class="foot rise d4">
+  <span class="f-brand">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="5" cy="19" r="2" fill="currentColor"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      <path d="M5 19 L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M12 12 L19 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M13 5 H19 V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span><b>Intent Solutions</b> · Cohort Learning Hub</span>
+  </span>
+  <span class="f-credit">Education arm · led by Max Sheahan</span>
+</footer>
+
+</body>
+</html>

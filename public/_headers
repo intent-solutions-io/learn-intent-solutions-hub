@@ -1,0 +1,3 @@
+# HTML/API always revalidate so deploys show immediately (no more stale "it went dark")
+/*
+  Cache-Control: no-cache

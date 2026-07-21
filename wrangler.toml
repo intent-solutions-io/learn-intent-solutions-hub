@@ -1,0 +1,17 @@
+name = "cohort-hub"
+main = "src/index.ts"
+compatibility_date = "2026-06-01"
+
+# static hub (index.html, ask.html, …) served directly; the Worker runs for /api/*
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
+# question queue — the flywheel's capture store
+[[d1_databases]]
+binding = "DB"
+database_name = "cohort-hub-db"
+database_id = "194f2205-ed0e-4228-b94d-248c8d131bf1"
+
+# drizzle-kit writes migrations here; wrangler applies them
+migrations_dir = "drizzle"

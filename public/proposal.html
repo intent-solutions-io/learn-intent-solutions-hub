@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Cohort Hub &amp; Community Platform — Proposal · Intent Solutions</title>
+<meta name="description" content="Internal proposal for Jeremy: the cohort hub today, and the community platform buildout." />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="apple-touch-icon" href="/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="/theme.css" />
+<style>
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---- cover ---- */
+  .cover { padding: 56px 0 40px; border-bottom: 1px solid var(--line); margin-bottom: 48px; }
+  .cover-kicker { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  .cover h1 { font-family: var(--font-display); font-size: clamp(32px, 5vw, 46px); font-weight: 800; letter-spacing: -0.02em; line-height: 1.08; }
+  .cover h1 em { font-style: normal; color: var(--accent-bright); }
+  .cover-lede { margin-top: 20px; font-size: 15.5px; line-height: 1.62; color: var(--ink-dim); max-width: 60ch; }
+  .cover-meta { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 32px; padding-top: 22px; border-top: 1px solid var(--line-soft); }
+  .cm-k { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+  .cm-v { margin-top: 6px; font-size: 13.5px; font-weight: 600; color: var(--ink); }
+
+  /* ---- hub CTA (the "one artifact" link between proposal + product) ---- */
+  .hub-cta {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    margin-top: 28px; padding: 18px 22px; border-radius: 14px;
+    background: linear-gradient(180deg, var(--accent-wash), transparent 70%), var(--bg-elevated);
+    border: 1px solid var(--accent-line); box-shadow: var(--shadow);
+  }
+  .hub-cta-text { font-size: 13.5px; color: var(--ink-dim); }
+  .hub-cta-text b { color: var(--ink); }
+  .hub-cta a.cta { flex-shrink: 0; display: inline-flex; align-items: center; gap: 10px; font-size: 14px; padding: 11px 20px; border-radius: 999px; }
+  .hub-cta a.cta svg { width: 15px; height: 15px; }
+
+  /* ---- sections ---- */
+  section.sec { padding: 44px 0; border-top: 1px solid var(--line); }
+  section.sec:first-of-type { border-top: none; padding-top: 0; }
+  .sec-num { font-family: var(--font-mono); font-size: 11px; color: var(--accent); letter-spacing: 0.06em; }
+  .sec-head h2 { font-family: var(--font-display); font-size: 25px; font-weight: 700; letter-spacing: -0.01em; margin: 8px 0 4px; }
+  .sec-intro { font-size: 13.5px; color: var(--ink-dim); max-width: 62ch; margin-top: 8px; line-height: 1.6; }
+  .lead { font-size: 14.5px; line-height: 1.65; color: var(--ink-dim); margin-top: 14px; max-width: 64ch; }
+  .lead strong, .lead b { color: var(--ink); font-weight: 600; }
+
+  .callout {
+    margin-top: 20px; padding: 16px 19px; border-radius: 13px;
+    background: linear-gradient(180deg, var(--accent-wash), transparent 130%);
+    border: 1px solid var(--accent-line);
+  }
+  .callout .ck { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 7px; }
+  .callout p { font-size: 13px; color: var(--ink-dim); line-height: 1.6; }
+  .callout p strong { color: var(--ink); }
+
+  /* status list */
+  .status-list { display: grid; gap: 9px; margin-top: 20px; }
+  .sl-row { display: flex; gap: 12px; align-items: flex-start; padding: 14px 16px; border-radius: 12px; background: var(--bg-elevated); border: 1px solid var(--line); }
+  .sl-tick { flex-shrink: 0; width: 19px; height: 19px; border-radius: 999px; display: grid; place-items: center; margin-top: 1px; }
+  .sl-tick svg { width: 11px; height: 11px; }
+  .sl-tick.done { background: var(--positive); color: var(--bg); }
+  .sl-tick.pend { background: var(--pending-wash); border: 1.5px solid var(--pending-line); color: var(--pending); }
+  .sl-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+  .sl-title .pill { font-family: var(--font-mono); font-size: 8.5px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; margin-left: 8px; vertical-align: 1px; }
+  .pill.live { background: var(--positive-wash); color: var(--positive); }
+  .pill.todo { background: var(--pending-wash); color: var(--pending); }
+  .sl-desc { font-size: 12px; color: var(--ink-faint); margin-top: 4px; line-height: 1.55; }
+
+  /* feature grid */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 18px; }
+  .feature { background: var(--bg-elevated); border: 1px solid var(--line); border-radius: 14px; padding: 18px 19px; box-shadow: var(--shadow); }
+  .feature .fh { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .feature .fi { width: 27px; height: 27px; border-radius: 8px; background: var(--accent-wash); display: grid; place-items: center; flex-shrink: 0; }
+  .feature .fi svg { width: 15px; height: 15px; color: var(--accent); }
+  .feature h3 { font-family: var(--font-display); font-size: 14.5px; font-weight: 700; color: var(--ink); }
+  .feature p { font-size: 12px; color: var(--ink-dim); line-height: 1.55; }
+
+  /* flywheel */
+  .flow { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+  .flow-step { flex: 1; min-width: 150px; padding: 15px 15px; background: var(--bg-elevated); border: 1px solid var(--line); border-radius: 13px; position: relative; }
+  .flow-step .n { font-family: var(--font-mono); font-size: 9px; color: var(--accent); letter-spacing: 0.1em; }
+  .flow-step .t { font-size: 12.5px; font-weight: 700; color: var(--ink); margin-top: 7px; }
+  .flow-step .s { font-size: 11px; color: var(--ink-faint); margin-top: 4px; line-height: 1.5; }
+
+  /* stack chips */
+  .stack { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+  .chip { font-family: var(--font-mono); font-size: 11px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-dim); background: var(--bg-elevated); }
+  .chip b { color: var(--accent); font-weight: 500; }
+
+  /* phases */
+  .phase { display: flex; gap: 15px; padding: 16px 18px; border-radius: 13px; background: var(--bg-elevated); border: 1px solid var(--line); margin-top: 11px; box-shadow: var(--shadow); }
+  .ph-idx { flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px; background: var(--bg); color: var(--accent-bright); font-family: var(--font-display); font-weight: 700; font-size: 15px; display: grid; place-items: center; }
+  .ph-name { font-family: var(--font-display); font-size: 14.5px; font-weight: 700; color: var(--ink); }
+  .ph-effort { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin-left: 10px; }
+  .ph-desc { font-size: 12px; color: var(--ink-dim); margin-top: 6px; line-height: 1.55; }
+  .ph-desc b { color: var(--ink); }
+
+  /* decisions table */
+  table.dec { width: 100%; border-collapse: collapse; margin-top: 18px; }
+  .dec th { text-align: left; font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faint); padding: 0 12px 9px; border-bottom: 1px solid var(--line); }
+  .dec td { padding: 12px 12px; border-bottom: 1px solid var(--line-soft); font-size: 12px; color: var(--ink-dim); vertical-align: top; }
+  .dec td.q { font-weight: 600; color: var(--ink); width: 40%; }
+  .dec .owner { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+
+  /* guardrails */
+  .guard { display: grid; gap: 9px; margin-top: 18px; }
+  .guard .g { display: flex; gap: 10px; align-items: flex-start; font-size: 12.5px; color: var(--ink-dim); line-height: 1.55; }
+  .guard .g .dot { flex-shrink: 0; width: 5px; height: 5px; border-radius: 999px; background: var(--accent); margin-top: 7px; }
+  .guard .g b { color: var(--ink); }
+
+  footer.foot { margin-top: 40px; }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; }
+    .cover-meta { gap: 20px; }
+    .hub-cta { flex-direction: column; align-items: flex-start; }
+    .hub-cta a.cta { width: 100%; justify-content: center; }
+    table.dec, table.dec tbody, table.dec tr, table.dec td { display: block; width: 100%; }
+    .dec tr { padding: 12px 0; border-bottom: 1px solid var(--line-soft); }
+    .dec td { border-bottom: none; padding: 3px 0; }
+    .dec thead { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="header-glow" aria-hidden="true"></div>
+  <a class="brand" href="/">
+    <span class="logo-badge" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="5" cy="19" r="2" fill="var(--bg)"/>
+        <circle cx="12" cy="12" r="2" fill="var(--bg)"/>
+        <path d="M5 19 L12 12" stroke="var(--bg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 12 L19 5" stroke="var(--bg)" stroke-width="2" stroke-linecap="round"/>
+        <path d="M13 5 H19 V11" stroke="var(--bg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+    <span class="name">Intent Solutions <span class="sep">/</span> <span class="here">Proposal</span></span>
+  </a>
+  <nav class="crumbs">
+    <a href="/">Home</a>
+    <a href="/#tracks">Tracks</a>
+    <a href="/practice">Practice</a>
+    <a href="/#tools">Tools</a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+  <header class="cover rise">
+    <div class="cover-kicker">Internal proposal · decision doc</div>
+    <h1>The Cohort Hub,<br />and the <em>community</em><br />that makes it stick.</h1>
+    <p class="cover-lede">We built a learning hub for Anthropic's official certifications. This is the case for the next step: turning it from a study tool into a durable cohort program with a real community platform underneath it.</p>
+    <div class="cover-meta">
+      <div><div class="cm-k">Prepared for</div><div class="cm-v">Jeremy</div></div>
+      <div><div class="cm-k">From</div><div class="cm-v">Max Sheahan · Education</div></div>
+      <div><div class="cm-k">Date</div><div class="cm-v">July 2026</div></div>
+    </div>
+    <div class="hub-cta">
+      <div class="hub-cta-text">Everything below marked <b>Live</b> is real and running today &mdash; not a mockup.</div>
+      <a class="cta" href="/">
+        Open the live hub
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- 01 — THE OPPORTUNITY -->
+  <section class="sec rise">
+    <div class="sec-num">01</div>
+    <div class="sec-head"><h2>The opportunity</h2></div>
+    <p class="lead">Anthropic launched its first official certifications in 2026: four exams across Associate, Developer, and Architect tracks. There is now a credential worth preparing for, and no established place to prepare for it as a group. <strong>Intent Solutions runs that place.</strong> The hub already prepares members for all four exams and captures what confuses them. What it does not yet have is the community layer that turns a study tool into a program people stay in.</p>
+    <div class="callout">
+      <div class="ck">The ask, in one line</div>
+      <p><strong>Greenlight the community platform buildout</strong> — real accounts, member profiles, and a posting feed — so the hub becomes a cohort people belong to, not a site they visit once before an exam.</p>
+    </div>
+  </section>
+
+  <!-- 02 — WHERE WE ARE TODAY -->
+  <section class="sec rise">
+    <div class="sec-num">02</div>
+    <div class="sec-head"><h2>Where we are today</h2></div>
+    <p class="sec-intro">Everything below is built and live, unless marked otherwise. The foundation is done; the proposal is about what sits on top of it.</p>
+    <div class="status-list">
+      <div class="sl-row">
+        <span class="sl-tick done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <div><div class="sl-title">Four certification tracks <span class="pill live">Live</span></div><div class="sl-desc">Architect&ndash;Foundations, Associate, Developer, and Architect&ndash;Professional. Each has a prep guide and a scored practice test, with format and domain facts sourced to Anthropic's official Exam Guides.</div></div>
+      </div>
+      <div class="sl-row">
+        <span class="sl-tick done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <div><div class="sl-title">Practice engine with domain diagnostics <span class="pill live">Live</span></div><div class="sl-desc">Timed tests that score by domain, not just a total, plus a per-device readiness meter that tracks progress toward sitting the exam.</div></div>
+      </div>
+      <div class="sl-row">
+        <span class="sl-tick done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <div><div class="sl-title">Question queue <span class="pill live">Live</span></div><div class="sl-desc">The Ask form writes to our database, ranked weekly to find recurring confusion. This is the raw material for the FAQ and the planned video content.</div></div>
+      </div>
+      <div class="sl-row">
+        <span class="sl-tick done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <div><div class="sl-title">One unified hub, on brand, mobile-ready <span class="pill live">Live</span></div><div class="sl-desc">A single shell for the feed, tracks, practice, and tools &mdash; nothing launches to a separate page, and there's always a way back. Verified on phones; the link is already in the cohort's hands.</div></div>
+      </div>
+      <div class="sl-row">
+        <span class="sl-tick pend"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 7v6M12 16.5v.5"/></svg></span>
+        <div><div class="sl-title">Posting, accounts, profiles <span class="pill todo">Not built</span></div><div class="sl-desc">The feed shows one real announcement and an honest empty state. The composer is deliberately disabled, because there is no account system behind it yet. That gap is what this proposal closes.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 — THE PROGRAM -->
+  <section class="sec rise">
+    <div class="sec-num">03</div>
+    <div class="sec-head"><h2>The program</h2></div>
+    <p class="sec-intro">What a cohort member actually gets, and why the pieces reinforce each other rather than sitting side by side.</p>
+    <div class="grid-2">
+      <div class="feature">
+        <div class="fh"><span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h10"/></svg></span><h3>Prep for every track</h3></div>
+        <p>All four certifications in one place, so a member can start where they are, ops or engineering, and move up without leaving the hub.</p>
+      </div>
+      <div class="feature">
+        <div class="fh"><span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></span><h3>Diagnostics, not vanity scores</h3></div>
+        <p>The practice engine scores by domain and shows exactly where a member is weak, turning study into a targeted loop instead of guesswork.</p>
+      </div>
+      <div class="feature">
+        <div class="fh"><span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><h3>Questions that get answered</h3></div>
+        <p>Members ask; we answer on a weekly rhythm. The queue is searchable, so the same question does not get asked ten times.</p>
+      </div>
+      <div class="feature">
+        <div class="fh"><span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span><h3>A place to belong</h3></div>
+        <p>Build logs, wins, and show-and-tell in a shared feed. This is the piece that is not built yet, and the reason people come back after the exam.</p>
+      </div>
+    </div>
+
+    <div class="sec-num" style="margin-top:36px">04</div>
+    <div class="sec-head"><h2>Why it compounds</h2></div>
+    <p class="sec-intro">The program is designed as a loop. Each part feeds the next, which is what makes it a business rather than a course.</p>
+    <div class="flow">
+      <div class="flow-step"><div class="n">01</div><div class="t">Members ask</div><div class="s">Real confusion lands in the queue, tagged by lane.</div></div>
+      <div class="flow-step"><div class="n">02</div><div class="t">We answer &amp; rank</div><div class="s">Weekly triage surfaces the recurring questions.</div></div>
+      <div class="flow-step"><div class="n">03</div><div class="t">It becomes content</div><div class="s">The top questions seed the FAQ and the video plan.</div></div>
+      <div class="flow-step"><div class="n">04</div><div class="t">Content pulls the next cohort</div><div class="s">Reach brings new members, who ask new questions.</div></div>
+    </div>
+    <div class="callout">
+      <div class="ck">What we will not claim</div>
+      <p>The program prepares people; it does not guarantee certification or employment. Anthropic administers and scores the exams. Every "official" fact is sourced and cited; our own guidance is labeled as ours. <strong>No invented members, metrics, or testimonials — ever.</strong> These are hard rules, and they are already enforced across the live hub.</p>
+    </div>
+  </section>
+
+  <!-- 05 — THE COMMUNITY PLATFORM -->
+  <section class="sec rise">
+    <div class="sec-num">05</div>
+    <div class="sec-head"><h2>The community platform</h2></div>
+    <p class="sec-intro">Three things stand between the hub today and a real community: identity, posting, and moderation. The elegant path keeps it simple and safe for a known cohort.</p>
+    <div class="grid-3">
+      <div class="feature">
+        <div class="fh"><span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><h3>Sign in</h3></div>
+        <p>Passwordless magic links, gated to a cohort roster. No passwords, no open signup, no bot surface. Reading stays public; only posting needs an account.</p>
+      </div>
+      <div class="feature">
+        <div class="fh"><span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><h3>Profiles</h3></div>
+        <p>A member's profile is their roster entry, filled in on first sign-in. No separate account-creation flow to build or maintain.</p>
+      </div>
+      <div class="feature">
+        <div class="fh"><span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><h3>Posting &amp; feed</h3></div>
+        <p>Attributed posts, categories, and light moderation. Every author is a verified member, which is what keeps the feed honest.</p>
+      </div>
+    </div>
+    <div class="callout">
+      <div class="ck">Why magic links, not passwords or Google login</div>
+      <p>For a known, finite cohort, a magic link collapses sign-up, log-in, and identity-check into one email. The roster is the gate, so there is nothing to abuse and no fake accounts. Passwords would mean owning reset flows and a credential we are liable for; social login would still need the same roster on top. <strong>Read is public, write needs a verified member, membership is a list we control.</strong></p>
+    </div>
+    <div style="margin-top:22px">
+      <div class="eyebrow" style="margin-bottom:0">Built on the stack we already run</div>
+      <div class="stack">
+        <span class="chip"><b>Cloudflare</b> Workers</span>
+        <span class="chip"><b>Hono</b> routing</span>
+        <span class="chip"><b>D1</b> + <b>Drizzle</b></span>
+        <span class="chip"><b>better-auth</b> magic links</span>
+        <span class="chip"><b>Resend</b> email</span>
+      </div>
+      <p style="margin-top:12px;font-size:12px;color:var(--ink-faint);line-height:1.55;">No new platform to learn and no new vendor relationship of consequence. The one genuinely new dependency is an email sender for the magic links, and email is the single thing that can fail quietly, so it is the piece we harden first.</p>
+    </div>
+  </section>
+
+  <!-- 06 — HOW WE'D BUILD IT -->
+  <section class="sec rise">
+    <div class="sec-num">06</div>
+    <div class="sec-head"><h2>How we would build it</h2></div>
+    <p class="sec-intro">Three phases, each shippable on its own. Effort is relative, not a fixed quote; a firm estimate follows once you lock the scope below.</p>
+    <div class="phase">
+      <div class="ph-idx">1</div>
+      <div><div><span class="ph-name">Identity &amp; roster</span><span class="ph-effort">Smallest unlock</span></div><div class="ph-desc">Magic-link sign-in, a <b>cohort_members</b> allowlist, and a session-gated write path. Nothing user-facing changes except a "sign in to post" state. This is the foundation everything else needs.</div></div>
+    </div>
+    <div class="phase">
+      <div class="ph-idx">2</div>
+      <div><div><span class="ph-name">Posts &amp; feed</span><span class="ph-effort">The visible payoff</span></div><div class="ph-desc">A posts table and endpoints, the composer switched on for members, categories wired to the existing filter chips. The feed goes from an honest empty state to a living one.</div></div>
+    </div>
+    <div class="phase">
+      <div class="ph-idx">3</div>
+      <div><div><span class="ph-name">Profiles &amp; moderation</span><span class="ph-effort">Durability</span></div><div class="ph-desc">Member profiles, a light moderation queue, and the controls that keep a live cohort feed healthy over time.</div></div>
+    </div>
+
+    <div class="sec-num" style="margin-top:36px">07</div>
+    <div class="sec-head"><h2>What we need from you</h2></div>
+    <p class="sec-intro">These are the open decisions only you can settle. Most of the platform work is blocked on the first two.</p>
+    <table class="dec">
+      <thead><tr><th>Decision</th><th>Why it matters</th><th>Owner</th></tr></thead>
+      <tbody>
+        <tr><td class="q">The cohort roster</td><td>Who is in. It is the allowlist that gates sign-in, so posting cannot ship without it.</td><td class="owner">Jeremy</td></tr>
+        <tr><td class="q">Cohort access mechanics &amp; sit dates</td><td>How members join and when they target the exam. The public Exam Guides do not cover partner-cohort logistics.</td><td class="owner">Jeremy</td></tr>
+        <tr><td class="q">Partner pricing &amp; eligibility policy</td><td>Anything partner-facing routes through you, by design, rather than members contacting Anthropic support individually.</td><td class="owner">Jeremy</td></tr>
+        <tr><td class="q">Booking links (you &amp; Max)</td><td>The "Book a call" panel is built and waiting on real Calendly URLs.</td><td class="owner">Jeremy + Max</td></tr>
+        <tr><td class="q">Go / no-go on the buildout</td><td>Whether we start Phase 1 now, or hold the platform and keep the hub as a study tool.</td><td class="owner">Jeremy</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 08/09 — RISKS + RECOMMENDATION -->
+  <section class="sec rise">
+    <div class="sec-num">08</div>
+    <div class="sec-head"><h2>Risks &amp; guardrails</h2></div>
+    <div class="guard">
+      <div class="g"><span class="dot"></span><span><b>Email deliverability.</b> Magic links live or die on email arriving. We harden the sender first and give members a clear path when a link does not land.</span></div>
+      <div class="g"><span class="dot"></span><span><b>Privacy of a live cohort.</b> Real names and posts mean real responsibility. Access controls and data handling stay conservative; we do not expose member data or compile it across sources.</span></div>
+      <div class="g"><span class="dot"></span><span><b>Moderation load.</b> A feed needs tending. Phase 3 builds the controls; until then, posting stays small and close to us.</span></div>
+      <div class="g"><span class="dot"></span><span><b>Partner-sensitive questions.</b> These route to you in one batch, not many members contacting Anthropic independently. Already the rule on the live hub.</span></div>
+      <div class="g"><span class="dot"></span><span><b>No fabricated community.</b> Empty states stay honest until real members fill them. We never seed fake posts to look busier than we are.</span></div>
+    </div>
+
+    <div class="sec-num" style="margin-top:36px">09</div>
+    <div class="sec-head"><h2>Recommendation</h2></div>
+    <p class="lead">Start <strong>Phase 1</strong> — identity and the roster — as soon as you confirm who is in the cohort. It is the smallest, safest unlock, it changes nothing members can see until we are ready, and every later phase depends on it. Phases 2 and 3 follow only once Phase 1 is proven.</p>
+    <p class="lead">Everything else in this proposal is already live. The community platform is the difference between a hub people use before an exam and a program they stay in after it. <strong>The one thing blocking the first move is your roster.</strong></p>
+    <div class="callout">
+      <div class="ck">Immediate next step</div>
+      <p><strong>Confirm the cohort roster and the go / no-go.</strong> With those two, Phase 1 starts, and the "sign in to post" state can be live on the hub in short order — no member-facing risk while we build.</p>
+    </div>
+    <div class="hub-cta" style="margin-top:24px">
+      <div class="hub-cta-text">See it for yourself &mdash; click through the tracks, practice a real question, try it on your phone.</div>
+      <a class="cta" href="/">
+        Open the live hub
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+      </a>
+    </div>
+  </section>
+
+</div>
+
+<footer class="foot">
+  <span class="f-brand">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="5" cy="19" r="2" fill="currentColor"/>
+      <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      <path d="M5 19 L12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M12 12 L19 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M13 5 H19 V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span><b>Intent Solutions</b> · Cohort Learning Hub</span>
+  </span>
+  <span class="f-credit">Education arm · led by Max Sheahan · Confidential — internal</span>
+</footer>
+
+</body>
+</html>
