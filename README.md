@@ -7,13 +7,6 @@ Exam tracks, practice tests with readiness gates, an Ask form that captures
 cohort questions, and the front door of the funnel: video → learn → certify →
 bench → paid client work through Intent Solutions.
 
-## Credit
-
-**Built and maintained by Max Sheahan** (originally `blueandyellow44/cohort-hub`).
-GitHub preserves every commit's author, so authorship stays with the builder.
-This repo lives in the company org so it can ship under the `intentsolutions.io`
-name; that does not move the credit, it gives the work a public stage.
-
 ## Stack (self-hosted — no Cloudflare)
 
 - **App:** [Hono](https://hono.dev) + [Drizzle ORM](https://orm.drizzle.team),
@@ -40,12 +33,10 @@ npm run dev                 # hub on http://127.0.0.1:8093
 API: `POST /api/ask` (question capture), `POST /api/practice` (result capture),
 `GET /api/questions` (bearer-token export), `GET /api/health` (liveness).
 
-## How work ships here
+## Deploy
 
-- **Max is the maintainer.** Build freely on branches, open pull requests.
-- **Jeremy is the merge gate.** Anything that ships under the company name is
-  previewed and approved before it goes live.
-- **`main` deploys automatically** to learn.intentsolutions.io on the Contabo
-  VPS: pre-deploy build gate → Tailscale-OIDC SSH → VPS force-command
-  (build + migrate + restart the systemd service) → `/api/health` smoke check.
-  Deploy contract: `deploy/README.md` and `intent-os/ops/deploy`.
+`main` deploys automatically to learn.intentsolutions.io on the Contabo VPS:
+pre-deploy build gate → Tailscale-OIDC SSH → VPS force-command
+(build + migrate + restart the systemd service) → `/api/health` smoke check.
+Work happens on branches via pull request. Deploy contract: `deploy/README.md`
+and `intent-os/ops/deploy`.

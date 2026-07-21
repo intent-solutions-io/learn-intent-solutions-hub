@@ -4,11 +4,11 @@ Thank you for your interest in contributing to **learn-intent-solutions-hub**! T
 
 ## How work ships here (read this first)
 
-This repo deploys under the `intentsolutions.io` name (`learn.intentsolutions.io`), so it runs on a simple, non-negotiable rule:
+This repo deploys under the `intentsolutions.io` name (`learn.intentsolutions.io`):
 
-- **You build, you open the PR.** Work freely on branches and open a pull request for anything you want in.
-- **A maintainer previews and approves every PR before it goes live.** Nothing ships under the company name without a review. This is the merge gate, not a slight: it is the same rule the whole estate holds itself to.
-- **`main` deploys automatically.** Once a PR is merged to `main`, it deploys to `learn.intentsolutions.io`. So a merge is a publish. Review is what stands between a branch and production.
+- **Work on branches, open a pull request** for anything you want in.
+- **Every PR is reviewed before it merges.** Nothing ships under the company name without a review — the same rule the whole estate holds itself to.
+- **`main` deploys automatically.** Once a PR is merged to `main`, it deploys to `learn.intentsolutions.io`. A merge is a publish.
 
 ### Two hard rules for this repo
 

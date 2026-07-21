@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-- feat(app): self-host the CPN cohort hub — port Max Sheahan's cohort-hub from Cloudflare Workers + D1 to Node/Hono + local SQLite (better-sqlite3). Adds src/ app + deploy/ (systemd unit, VPS deploy script, Caddy snippet, self-host runbook). No Cloudflare in the serving path.
+- feat(app): self-host the CPN cohort hub — port the cohort-hub app from Cloudflare Workers + D1 to Node/Hono + local SQLite (better-sqlite3). Adds src/ app + deploy/ (systemd unit, VPS deploy script, Caddy snippet, self-host runbook). No Cloudflare in the serving path.
 
 ## [v0.2.0] - 2026-07-17
 

@@ -79,5 +79,5 @@ OIDC → force-command → the deploy script above → post-deploy smoke against
   toolchain already present — used by the DiagnosticPro deploy).
 - `wrangler.toml` is kept for reference only; **nothing at deploy time uses
   Cloudflare / wrangler / D1**.
-- Source app authored by Max Sheahan (`blueandyellow44/cohort-hub`); this is the
-  runtime/hosting port, product behaviour unchanged.
+- This is the runtime/hosting port of the upstream cohort-hub app; product
+  behaviour is unchanged.

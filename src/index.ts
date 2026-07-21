@@ -4,7 +4,7 @@ import { desc } from "drizzle-orm";
 import { getDb } from "./db.js";
 import { questions, practiceResults } from "./schema.js";
 
-// Self-host port of Max Sheahan's cohort-hub (originally Cloudflare Workers + D1).
+// Self-host port of the cohort-hub app (originally Cloudflare Workers + D1).
 // Runtime seams that were Cloudflare-specific are swapped for Node primitives:
 //   drizzle(c.env.DB)   -> getDb()                (better-sqlite3 file, ./db.ts)
 //   c.env.EXPORT_TOKEN  -> process.env.EXPORT_TOKEN
