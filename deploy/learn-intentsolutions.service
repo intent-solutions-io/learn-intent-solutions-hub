@@ -1,0 +1,40 @@
+# /etc/systemd/system/learn-intentsolutions.service
+#
+# Intent Solutions Learn Hub — the CPN cohort hub, self-hosted on the VPS.
+# Node/Hono service on loopback :8093; Caddy reverse-proxies /api/* here and
+# serves ./public/ statically. Mirrors the estate's other systemd-native
+# services (forms-api :8090, scott-note-api :8091).
+#
+# Install:  see deploy/README.md (self-host runbook).
+
+[Unit]
+Description=Intent Solutions Learn Hub (CPN cohort hub — Hono/Node + SQLite)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/learn-intentsolutions
+ExecStart=/usr/bin/node /srv/learn-intentsolutions/dist/server.node.js
+Environment=NODE_ENV=production
+Environment=PORT=8093
+Environment=DATABASE_PATH=/srv/learn-intentsolutions/data/cohort-hub.db
+# EXPORT_TOKEN (bearer for GET /api/questions) — SOPS-decrypted to this file (640).
+EnvironmentFile=/etc/intentsolutions/learn-hub.env
+Restart=on-failure
+RestartSec=5s
+User=intentsolutions
+Group=intentsolutions
+StandardOutput=journal
+StandardError=journal
+# Hardening (matches forms-api posture)
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadOnlyPaths=/etc/intentsolutions
+ReadWritePaths=/srv/learn-intentsolutions
+SupplementaryGroups=adm
+
+[Install]
+WantedBy=multi-user.target

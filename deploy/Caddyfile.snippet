@@ -1,0 +1,32 @@
+# learn.intentsolutions.io — REPLACES the current static-only block in
+# /etc/caddy/Caddyfile (the one that only does `root … /public` + `file_server`).
+#
+# Static hub assets are still served directly by Caddy from ./public/; the
+# Node service on :8093 handles only /api/* (Ask capture, practice capture,
+# the bearer-gated export, and /api/health).
+#
+# Apply:  edit /etc/caddy/Caddyfile -> `caddy validate` -> `systemctl reload caddy`
+# (NEVER restart — Caddy is live for the demos site).
+
+learn.intentsolutions.io {
+    encode gzip
+
+    # HTML always revalidates so deploys show immediately (Max's _headers intent).
+    @html path *.html /
+    header @html Cache-Control "no-cache"
+
+    # API -> the Node service (the flywheel store lives behind this).
+    handle /api/* {
+        reverse_proxy 127.0.0.1:8093
+    }
+
+    # Everything else: the static hub, served straight off disk by Caddy.
+    handle {
+        root * /srv/learn-intentsolutions/public
+        file_server
+    }
+
+    log {
+        output file /var/log/caddy/learn-access.log
+    }
+}

@@ -18,17 +18,33 @@ Key commands: `bd prime` (LLM context), `bd ready`, `bd list --status in_progres
 
 ## Build & Test
 
-<!-- Add project-specific build commands here -->
+Self-hosted Hono/Node app with a local SQLite store (no Cloudflare).
+
+```bash
+npm install          # compiles better-sqlite3 (native)
+npm run migrate      # apply ./drizzle migrations to DATABASE_PATH
+npm run dev          # tsx watch — hub on :8093
+npm run build        # tsc -> dist/
+npm run typecheck    # tsc --noEmit (also `npm test`)
+npm start            # node dist/server.node.js (prod entry)
+```
+
+Env: `PORT` (8093), `DATABASE_PATH` (`./data/cohort-hub.db` dev; `/srv/learn-intentsolutions/data/cohort-hub.db` prod), `EXPORT_TOKEN` (bearer for `GET /api/questions`). Prod env comes from the systemd `EnvironmentFile`, not `.env`.
+
+## Deploy
+
+`main` → GitHub Actions → Tailscale-OIDC SSH → VPS force-command (build + migrate + restart the `learn-intentsolutions` systemd service on :8093) → Caddy serves `public/` + proxies `/api/*` → `/api/health` smoke. Full runbook + systemd unit + Caddy block: **`deploy/`**. Ops authority: `intent-os/ops/deploy`.
 
 ## Project Structure
 
 ```
 learn-intent-solutions-hub/
+├── src/                # index.ts (Hono app+routes), db.ts, server.node.ts, migrate.ts, schema.ts
+├── public/             # static hub UI + question banks (Caddy-served)
+├── drizzle/            # SQLite migrations (dialect: sqlite)
+├── deploy/             # systemd unit, VPS deploy script, Caddy snippet, self-host runbook
 ├── 000-docs/           # Enterprise documentation (doc-filing v4)
 ├── .github/            # CI/CD, issue templates, PR template
-├── CLAUDE.md           # This file
-├── CONTRIBUTING.md     # Contribution guidelines
-├── SECURITY.md         # Security policy
 └── README.md           # Project overview
 ```
 
